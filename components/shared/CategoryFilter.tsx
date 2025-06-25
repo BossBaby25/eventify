@@ -21,7 +21,7 @@ const CategoryFilter = () => {
   useEffect(() => {
     const getCategories = async () => {
       const categoryList = await getAllCategories();
-
+      
       categoryList && setCategories(categoryList as ICategory[])
     }
 
@@ -29,39 +29,54 @@ const CategoryFilter = () => {
   }, [])
 
   const onSelectCategory = (category: string) => {
-      let newUrl = '';
+    let newUrl = '';
 
-      if(category && category !== 'All') {
-        newUrl = formUrlQuery({
-          params: searchParams.toString(),
-          key: 'category',
-          value: category
-        })
-      } else {
-        newUrl = removeKeysFromQuery({
-          params: searchParams.toString(),
-          keysToRemove: ['category']
-        })
-      }
+    if(category && category !== 'All') {
+      newUrl = formUrlQuery({
+        params: searchParams.toString(),
+        key: 'category',
+        value: category
+      })
+    } else {
+      newUrl = removeKeysFromQuery({
+        params: searchParams.toString(),
+        keysToRemove: ['category']
+      })
+    }
 
-      router.push(newUrl, { scroll: false });
+    router.push(newUrl, { scroll: false });
   }
 
   return (
-    <Select onValueChange={(value: string) => onSelectCategory(value)}>
-      <SelectTrigger className="select-field">
-        <SelectValue placeholder="Category" />
-      </SelectTrigger>
-      <SelectContent>
-        <SelectItem value="All" className="select-item p-regular-14">All</SelectItem>
-
-        {categories.map((category) => (
-          <SelectItem value={category.name} key={category._id} className="select-item p-regular-14">
-            {category.name}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
+    <div className="w-full max-w-xs">
+      <Select onValueChange={(value) => onSelectCategory(value)}>
+        <SelectTrigger className="w-full h-11 px-4 py-2 bg-white border border-gray-300 rounded-lg shadow-sm hover:border-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 ease-in-out">
+          <SelectValue 
+            placeholder="Select category" 
+            className="text-gray-700 placeholder:text-gray-500"
+          />
+        </SelectTrigger>
+        <SelectContent className="w-full max-h-60 bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden">
+          <div className="p-1">
+            <SelectItem 
+              value="All"
+              className="w-full px-3 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 focus:bg-blue-50 focus:text-blue-700 rounded-md cursor-pointer transition-colors duration-150 ease-in-out"
+            >
+              All Categories
+            </SelectItem>
+            {categories.map((category) => (
+              <SelectItem 
+                key={category._id}
+                value={category.name}
+                className="w-full px-3 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 focus:bg-blue-50 focus:text-blue-700 rounded-md cursor-pointer transition-colors duration-150 ease-in-out"
+              >
+                {category.name}
+              </SelectItem>
+            ))}
+          </div>
+        </SelectContent>
+      </Select>
+    </div>
   )
 }
 
