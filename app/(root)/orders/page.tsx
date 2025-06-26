@@ -1,12 +1,18 @@
 import Search  from '@/components/shared/Search'
 import { getOrdersByEvent } from '@/lib/actions/order.actions'
 import { formatDateTime, formatPrice } from '@/lib/utils'
-import { SearchParamProps } from '@/types'
 import { IOrderItem } from '@/lib/database/models/order.model'
 
-const Orders = async ({ searchParams }: SearchParamProps) => {
-  const eventId = (searchParams?.eventId as string) || ''
-  const searchText = (searchParams?.query as string) || ''
+// FIX: Update type definition for Next.js 15+ - searchParams is now a Promise
+type OrdersPageProps = {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}
+
+const Orders = async ({ searchParams }: OrdersPageProps) => {
+  // FIX: Await searchParams before accessing properties (Next.js 15+ requirement)
+  const resolvedSearchParams = await searchParams;
+  const eventId = (resolvedSearchParams?.eventId as string) || ''
+  const searchText = (resolvedSearchParams?.query as string) || ''
 
   const orders = await getOrdersByEvent({ eventId, searchString: searchText })
 

@@ -2,10 +2,11 @@ import EventForm from "@/components/shared/EventForm"
 import { getEventById } from "@/lib/actions/event.actions"
 import { auth, currentUser } from "@clerk/nextjs/server";  // FIX: Import from /server
 
+// FIX: Update type to reflect that params is a Promise in Next.js 15+
 type UpdateEventProps = {
-  params: {
+  params: Promise<{
     id: string
-  }
+  }>
 }
 
 const UpdateEvent = async ({ params }: UpdateEventProps) => {
