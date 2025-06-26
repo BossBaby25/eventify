@@ -2,13 +2,18 @@ import CheckoutButton from '@/components/shared/CheckoutButton';
 import Collection from '@/components/shared/Collection';
 import { getEventById, getRelatedEventsByCategory } from '@/lib/actions/event.actions'
 import { formatDateTime } from '@/lib/utils';
-import { SearchParamProps } from '@/types'
 import Image from 'next/image';
 import { Calendar, Clock, MapPin, User, Tag, DollarSign, ExternalLink, Share2, Heart, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
+// Updated type definition for Next.js 15+
+type SearchParamProps = {
+  params: Promise<{ id: string }>
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}
+
 const EventDetails = async ({ params, searchParams }: SearchParamProps) => {
-  // FIX: Await params and searchParams before accessing properties (Next.js 15+ requirement)
+  // Await params and searchParams (Next.js 15+ requirement)
   const resolvedParams = await params;
   const resolvedSearchParams = await searchParams;
   
